@@ -94,6 +94,23 @@ def sistema_ventas():
         conexion.commit()
         print("Venta registrada exitosamente")
         input("\nPresione Enter para continuar...")
+
+def reporte_diario():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("--- REPORTE DIARIO ---")
+    cursor.execute('''
+        SELECT fecha, nombre
+        FROM ventas
+                   INNER JOIN paquetes ON ventas.paquete_id = paquetes.id_paquete
+        WHERE fecha = date('now')
+    ''')
+    ventas = cursor.fetchall()
+    for venta in ventas:
+        fecha, nombre = venta[0], venta[1]
+        print(f"{fecha} - {nombre}")
+
+    if not ventas:
+        print("No se han registrado ventas para hoy.")
     
 def menu_principal():
     salir = False
@@ -110,7 +127,8 @@ def menu_principal():
             case '1':
                 sistema_ventas()
             case '2':
-                print("Funcionalidad de reporte diario aún no implementada.")
+                reporte_diario()
+                input("\nPresione Enter para continuar...")
             case '3':                
                 salir = True
                 conexion.close()
