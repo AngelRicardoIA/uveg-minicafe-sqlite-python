@@ -89,7 +89,7 @@ def sistema_ventas():
             continue
 
         cursor.execute('''
-            INSERT INTO ventas (fecha, paquete_id) VALUES (date('now'), ?)
+            INSERT INTO ventas (fecha, paquete_id) VALUES (datetime('now'), ?)
         ''', (paquete_id,))
         conexion.commit()
         print("Venta registrada exitosamente")
@@ -102,7 +102,7 @@ def reporte_diario():
         SELECT fecha, nombre
         FROM ventas
                    INNER JOIN paquetes ON ventas.paquete_id = paquetes.id_paquete
-        WHERE fecha = date('now')
+        WHERE date(fecha) = date('now')
     ''')
     ventas = cursor.fetchall()
     for venta in ventas:
